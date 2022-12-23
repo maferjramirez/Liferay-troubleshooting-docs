@@ -5,6 +5,24 @@ This is because JVM library used for random number generation relies on  /dev/ra
 Although `/dev/random`  is more secure, using  `/dev/urandom`  instead if the startup is slow. 
 
 Testing libraries diff
+	
+    [liferay@liferay-desarrollo@AWS 09:25:38 ~]
+    $ time head -1 /dev/random
+    2?????c??????8???mtz?0KY??4 .]?\???^&?xTH	
+    
+    real	9m54.610s
+    user	0m0.000s
+    sys	0m0.002s
+    
+    [liferay@liferay-desarrollo@AWS 09:35:40 ~]
+    $ time head -1 /dev/urandom
+    ?J?As?py????{18????X2??i?@[?{
+                                 ?Z?|?y??z??
+                                            ?????D՝g3?]2u??w????W]?6?JN~??ʤ?j]l:?L?/OY}?
+    
+    real	0m0.002s
+    user	0m0.000s
+    sys	0m0.002s
 
 ## Solutions
 For various scopes, here are some treatments that can speed up the startup of a WebLogic server.
