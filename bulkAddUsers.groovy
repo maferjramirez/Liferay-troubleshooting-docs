@@ -39,7 +39,7 @@ try {
 	USERS.each{ 
 		(emailAddress, firstName, lastName) = it
 		
-		User user = UserLocalServiceUtil.addUser(creatorUserId, PortalUtil.getDefaultCompanyId(), autoPassword, PASSWORD, password2, 
+		User user = UserLocalServiceUtil.addUser(creatorUserId, companyId, autoPassword, PASSWORD, password2, 
 			autoScreenName, screenName, emailAddress, facebookId, openId, locale, firstName, middleName, lastName, 
 			prefixId, suffixId, male, birthdayMonth, birthdayDay, birthdayYear, jobTitle, groupIds, organizationIds, 
 			roleIds, userGroupIds, sendEmail, serviceContext)
