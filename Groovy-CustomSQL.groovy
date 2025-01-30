@@ -32,10 +32,45 @@ def formatAsHTML(table) {
     """
 }
 
+// Function to format the result as JSON
+def formatAsJSON(table) {
+    if (table.isEmpty()) return "[]"
+    
+    def headers = table[0]
+    def jsonRows = table.tail().collect { row ->
+        headers.indices.collectEntries { index ->
+            def value = row[index]
+            def jsonValue = value == null ? 'null' : 
+                           (value instanceof Number || value instanceof Boolean) ? value : 
+                           "\"${escapeJSONString(value.toString())}\""
+                           
+            [(headers[index]): jsonValue]
+        }
+    }.collect { rowMap ->
+        "{" + rowMap.entrySet().collect { 
+            "\"${escapeJSONString(it.key)}\":${it.value}" 
+        }.join(",") + "}"
+    }
+    
+    "[${jsonRows.join(",")}]"
+}
+
+// Escapes special characters in strings to comply with the JSON standard.
+def escapeJSONString(String str) {
+    str.replaceAll("\\\\", "\\\\\\\\")
+       .replaceAll("\"", "\\\\\"")
+       .replaceAll("\b", "\\\\b")
+       .replaceAll("\f", "\\\\f")
+       .replaceAll("\n", "\\\\n")
+       .replaceAll("\r", "\\\\r")
+       .replaceAll("\t", "\\\\t")
+}
+
 // Mapping of output formats
 def formatters = [
     "CSV": this.&formatAsCSV,
-    "HTML": this.&formatAsHTML
+    "HTML": this.&formatAsHTML,
+    "JSON": this.&formatAsJSON
 ]
 
 // Function to execute SQL query and fetch results
@@ -68,4 +103,4 @@ def executeQuery(query) {
 
 // Execute query and print formatted output
 def queryResult = executeQuery(SQL)
-println formatters["HTML"](queryResult)
+println formatters["JSON"](queryResult)
